@@ -1,0 +1,40 @@
+#!/usr/bin/env php
+<?php
+
+use Timer\DailyLogger;
+
+include 'bootstrap.php';
+
+$parameter = $argv[1] ?? null;
+
+$date = (new DateTime())->format('Y-m-d');
+
+$logger = new DailyLogger($date);
+$timerManager = new Timer\Manager();
+
+$counter = $timerManager->getCounter();
+
+if ($parameter == 'log') {
+    $log = readline('Log: ');
+    $logger->log(sprintf('%s, Timer: %s ', $log, $counter->getHourFormat()));
+    return;
+}
+
+match ($parameter) {
+    'reset' => $counter->reset(),
+    'stop' => $counter->stop(),
+    'increase' => $counter->increase($argv[2] ?? null),
+    default => $parameter = '',
+};
+
+$log = file_get_contents(TIMER_ROOT.'/logs/'.$date.'.log');
+
+
+$waybar = new Timer\WaybarRender(
+    $counter->getHourFormat() . ' | ',
+    $parameter,
+    $log,
+    'timer'
+);
+
+print $waybar->toJson() . PHP_EOL;
