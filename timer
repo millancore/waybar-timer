@@ -29,7 +29,10 @@ match ($parameter) {
     default => $parameter = '',
 };
 
-$log = file_get_contents(TIMER_ROOT.'/logs/'.$date.'.log');
+$log = '';
+if(file_exists(TIMER_ROOT.'/logs/'.$date.'.log')) {
+    $log = file_get_contents(TIMER_ROOT.'/logs/'.$date.'.log');
+}
 
 $label = sprintf('%s | %s %s', $counter->getHourFormat(), $timer->getTimeMinutesSoFar(),  $timer->getStatus()->label());
 

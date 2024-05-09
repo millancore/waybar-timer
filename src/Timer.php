@@ -50,10 +50,12 @@ class Timer
        $this->save();
     }
 
-    private function newTimer() : TimerModel
+    private function newTimer(string $uuid = null) : TimerModel
     {
+        $uuid = $uuid ?? uniqid();
+
        return new TimerModel(
-            uniqid(),
+            $uuid,
             time(),
             Type::TIMER,
             Status::WORKING
@@ -68,13 +70,20 @@ class Timer
 
     public function reset() : void
     {
-        $this->instance = $this->newTimer();
+        $this->instance = $this->newTimer(
+            $this->instance->uuid
+        );
         $this->save();
     }
 
     private function checkSwapStatus() : void
     {
         $minutes = $this->instance->getMinutes();
+
+        # Hotfix TODO: investigate why is running is opposite side
+        if ($minutes < 0) {
+            $this->reset();
+        }
 
         if ($minutes >= self::WORKING_TIME && $this->instance->is(Status::WORKING)) {
 
