@@ -20,7 +20,7 @@ class TimerModel
 
     public function getMinutes() : int
     {
-        return (time() - $this->timestamp) / Time::MINUTE_IN_SECONDS;
+        return ceil( (time() - $this->timestamp) / Time::MINUTE_IN_SECONDS);
     }
 
     public function is(Status $status) : bool

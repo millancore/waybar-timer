@@ -30,8 +30,10 @@ match ($parameter) {
 };
 
 $log = '';
-if(file_exists(TIMER_ROOT.'/logs/'.$date.'.log')) {
-    $log = file_get_contents(TIMER_ROOT.'/logs/'.$date.'.log');
+$dailyLogPath = TIMER_ROOT.'/logs/'.$date.'.log';
+
+if(file_exists($dailyLogPath)) {
+    $log = file_get_contents($dailyLogPath);
 }
 
 $label = sprintf('%s | %s %s', $counter->getHourFormat(), $timer->getTimeMinutesSoFar(),  $timer->getStatus()->label());

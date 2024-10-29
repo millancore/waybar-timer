@@ -115,7 +115,7 @@ class Counter
 
         $data = $result->fetchArray(SQLITE3_ASSOC);
 
-        return (time() - $data['timestamp']) / Time::MINUTE_IN_SECONDS;
+        return (int) ceil((time() - $data['timestamp']) / Time::MINUTE_IN_SECONDS);
     }
 
     public function getHourFormat() : string
